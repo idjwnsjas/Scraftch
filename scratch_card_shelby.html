@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Shelby 🎉</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #00ffcc;
+      text-shadow: 0 0 5px #0ff;
+    }
+    canvas {
+      border: 3px solid #00ffcc;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎂 Happy Birthday Shelby 🎂<br>Scratch to reveal your surprise! 🎁</h1>
+  <canvas id="scratchCard" width="300" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById('scratchCard');
+    const ctx = canvas.getContext('2d');
+    const image = new Image();
+    image.src = 'scratch_card_shelby.jpg';
+    image.onload = function () {
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'destination-out';
+    };
+    let isDrawing = false;
+    function getMousePos(canvas, evt) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+      };
+    }
+    canvas.addEventListener('mousedown', () => isDrawing = true);
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDrawing) return;
+      const pos = getMousePos(canvas, e);
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 20, 0, 2 * Math.PI);
+      ctx.fill();
+    });
+    canvas.addEventListener('touchstart', () => isDrawing = true);
+    canvas.addEventListener('touchend', () => isDrawing = false);
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (!isDrawing) return;
+      const touch = e.touches[0];
+      const pos = {
+        x: touch.clientX - canvas.getBoundingClientRect().left,
+        y: touch.clientY - canvas.getBoundingClientRect().top
+      };
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 20, 0, 2 * Math.PI);
+      ctx.fill();
+    }, { passive: false });
+  </script>
+</body>
+</html>
